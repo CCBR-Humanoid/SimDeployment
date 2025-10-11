@@ -1,0 +1,1 @@
+recursive-include simdeployment/ *.py *.txt py.typed MANIFEST.in
