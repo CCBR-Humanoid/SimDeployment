@@ -1,11 +1,14 @@
+"""Classes for actuators that return a torque for a single joint in the simulation."""
+
+import logging
 from abc import ABC, abstractmethod
 
 import numpy as np
 
 from simdeployment.types import ActuatorCommand
-import logging
 
 logger = logging.getLogger(__name__)
+
 
 class Actuator(ABC):
     """Abstract base class for actuators that return a torque for a single joint."""
@@ -44,7 +47,7 @@ class PositionActuator(Actuator):
     def get_torque(
         self,
         cmd: ActuatorCommand,
-    *,
+        *,
         qpos: float,
         qvel: float,
     ) -> float:

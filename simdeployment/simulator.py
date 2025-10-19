@@ -1,4 +1,5 @@
 """Wrapper around MuJoCo simulator."""
+
 import asyncio
 import logging
 import time
@@ -33,6 +34,8 @@ What this does:
 
 
 """
+
+
 def get_integrator(integrator: str) -> mujoco.mjtIntegrator:
     match integrator.lower():
         case "euler":
@@ -58,9 +61,7 @@ def get_solver(solver: str) -> mujoco.mjtSolver:
 
 
 class MujocoSimulator:
-
-    def __init__(self, model_path: Path, model_metadata: ModelMetadata,
-                 simulation_metadata: MuJoCoMetadata) -> None:
+    def __init__(self, model_path: Path, model_metadata: ModelMetadata, simulation_metadata: MuJoCoMetadata) -> None:
         self._model_path = model_path
 
         # load model from string path
@@ -85,8 +86,10 @@ class MujocoSimulator:
         # control_frequency = 50hz
         # dt = 0.001
         # steps_per_pd_update = (1/0.001) / 50 = 20
-        self._steps_per_pd_update = (1.0/self._dt) / self._control_frequency
-        logger.info("Simulation timestep: %.4f s, Control frequency: %.2f Hz, Steps per control update: %d",)
+        self._steps_per_pd_update = (1.0 / self._dt) / self._control_frequency
+        logger.info(
+            "Simulation timestep: %.4f s, Control frequency: %.2f Hz, Steps per control update: %d",
+        )
 
         # might not need this
         self._model_metadata = model_metadata
@@ -104,7 +107,6 @@ class MujocoSimulator:
 
         mujoco.mj_forward(self._model, self._data)
         mujoco.mj_step(self._model, self._data)
-
 
         # get our viewer
         self._viewer = QtViewer(
@@ -124,9 +126,7 @@ class MujocoSimulator:
         )
 
         # initialize actuator logic
-        self._joint_name_to_id = {
-            self._model.actuator(i).name: i for i in range(self._model.nu)
-        }
+        self._joint_name_to_id = {self._model.actuator(i).name: i for i in range(self._model.nu)}
 
         self._joint_name_to_actuator_name = {
             joint_name: f"{joint_name}_ctrl" for joint_name in self._joint_name_to_id.keys()
@@ -152,7 +152,6 @@ class MujocoSimulator:
 
             self._actuators[joint_id] = actuator
 
-
         self._current_commands: dict[str, ActuatorCommand] = {}
 
         self._target_time = time.time()
@@ -175,8 +174,8 @@ class MujocoSimulator:
                 joint_qpos_lookup = joint_id
                 joint_qvel_lookup = joint_id
                 if self._freejoint:
-                    joint_qpos_lookup += 7 # skip the freejoint's 7 dof (xyz, wxyz)
-                    joint_qvel_lookup += 6 # skip the freejoint's 6 dof (xyz, angular xyz)
+                    joint_qpos_lookup += 7  # skip the freejoint's 7 dof (xyz, wxyz)
+                    joint_qvel_lookup += 6  # skip the freejoint's 6 dof (xyz, angular xyz)
                 qpos = self._data.qpos[joint_qpos_lookup]
                 qvel = self._data.qvel[joint_qvel_lookup]
 
@@ -208,10 +207,10 @@ class MujocoSimulator:
             self._data.xfrc_applied[:] = xfrc
 
     async def get_actuator_state(self, joint_id: int) -> ActuatorState:
-        pass
+        return ActuatorState(0.0, 0.0, 0.0)
 
     async def get_sensor_data(self, sensor_name: str) -> dict:
-        pass
+        return {}
 
     async def set_actuator_command(self, joint_name: str, actuator_command: ActuatorCommand) -> None:
         """Set the target setpoint for a specific actuator.
