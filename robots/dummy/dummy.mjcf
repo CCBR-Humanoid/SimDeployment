@@ -1,0 +1,206 @@
+<mujoco model="bad_robot">
+  <default>
+    <default class="robot">
+      <default class="robstride_03">
+        <joint armature="0.02" frictionloss="0.2" damping="0.01" actuatorfrcrange="-60.0 60.0" />
+        <motor ctrlrange="-60.0 60.0" />
+      </default>
+      <default class="robstride_02">
+        <joint armature="0.0042" frictionloss="0.1" damping="0.01" actuatorfrcrange="-17.0 17.0" />
+        <motor ctrlrange="-17.0 17.0" />
+      </default>
+      <default class="visual">
+        <geom material="visualgeom" contype="0" conaffinity="0" group="2" />
+      </default>
+      <default class="collision">
+        <geom material="collision_material" condim="3" contype="0" conaffinity="1" priority="1" group="1" solref="0.005 1" solimp="0.99 0.999 1e-05" friction="0.64" />
+      </default>
+    </default>
+    <mesh maxhullvert="64" />
+    <default class="floor">
+      <geom contype="1" conaffinity="1" group="0" type="plane" size="0 0 0.05" material="groundplane" rgba="1 1 1 0.3" />
+    </default>
+  </default>
+
+  <compiler angle="radian" />
+
+  <asset>
+    <material name="base_material" rgba="1 0 0 1" />
+    <material name="torso_material" rgba="0.647059 0.647059 0.647059 1" />
+    <material name="IMU_material" rgba="0.615686 0.811765 0.929412 1" />
+    <material name="leg_link_material" rgba="1 0.756863 0.054902 1" />
+    <material name="default_material" rgba="0.7 0.7 0.7 1" />
+    <material name="collision_material" rgba="1.0 0.28 0.1 0.9" />
+    <mesh name="torso_collision.stl" file="meshes/torso_collision.stl" />
+    <mesh name="torso.stl" file="meshes/torso.stl" />
+    <mesh name="IMU_collision.stl" file="meshes/IMU_collision.stl" />
+    <mesh name="IMU.stl" file="meshes/IMU.stl" />
+    <mesh name="leg_link_collision.stl" file="meshes/leg_link_collision.stl" />
+    <mesh name="leg_link.stl" file="meshes/leg_link.stl" />
+    <mesh name="leg_link_5_collision.stl" file="meshes/leg_link_5_collision.stl" />
+    <mesh name="leg_link_5.stl" file="meshes/leg_link_5.stl" />
+    <mesh name="leg_link_9_collision.stl" file="meshes/leg_link_9_collision.stl" />
+    <mesh name="leg_link_9.stl" file="meshes/leg_link_9.stl" />
+    <mesh name="leg_link_2_collision.stl" file="meshes/leg_link_2_collision.stl" />
+    <mesh name="leg_link_2.stl" file="meshes/leg_link_2.stl" />
+    <mesh name="leg_link_6_collision.stl" file="meshes/leg_link_6_collision.stl" />
+    <mesh name="leg_link_6.stl" file="meshes/leg_link_6.stl" />
+    <mesh name="leg_link_10_collision.stl" file="meshes/leg_link_10_collision.stl" />
+    <mesh name="leg_link_10.stl" file="meshes/leg_link_10.stl" />
+    <mesh name="leg_link_3_collision.stl" file="meshes/leg_link_3_collision.stl" />
+    <mesh name="leg_link_3.stl" file="meshes/leg_link_3.stl" />
+    <mesh name="leg_link_7_collision.stl" file="meshes/leg_link_7_collision.stl" />
+    <mesh name="leg_link_7.stl" file="meshes/leg_link_7.stl" />
+    <mesh name="leg_link_11_collision.stl" file="meshes/leg_link_11_collision.stl" />
+    <mesh name="leg_link_11.stl" file="meshes/leg_link_11.stl" />
+    <mesh name="leg_link_4_collision.stl" file="meshes/leg_link_4_collision.stl" />
+    <mesh name="leg_link_4.stl" file="meshes/leg_link_4.stl" />
+    <mesh name="leg_link_8_collision.stl" file="meshes/leg_link_8_collision.stl" />
+    <mesh name="leg_link_8.stl" file="meshes/leg_link_8.stl" />
+    <mesh name="leg_link_12_collision.stl" file="meshes/leg_link_12_collision.stl" />
+    <mesh name="leg_link_12.stl" file="meshes/leg_link_12.stl" />
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2" />
+  </asset>
+
+  <worldbody>
+    <body name="base" pos="0.00000000 0.00000000 0.34575001" quat="1 0 0 0" childclass="robot">
+      <freejoint name="floating_base" />
+      <geom name="base_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="base_material" type="sphere" size="0.01" class="visual" />
+      <body name="torso" pos="0 0 0" quat="1.0 0.0 0.0 0.0">
+        <inertial pos="0 0 0" quat="1.0 0.0 0.0 0.0" mass="123.022540" diaginertia="9.238757 1.55296 10.325992" />
+        <geom name="torso_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="torso_collision.stl" class="collision" />
+        <geom name="torso_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="torso_material" type="mesh" mesh="torso.stl" class="visual" />
+        <body name="IMU" pos="0 0 0.077200" quat="-1.7320510330969933e-07 0.999999999999985 0.0 -0.0">
+          <inertial pos="0 0 -0.014010" quat="1.0 0.0 0.0 0.0" mass="0.022597" diaginertia="3e-06 3e-06 2e-06" />
+          <geom name="IMU_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="IMU_collision.stl" class="collision" />
+          <geom name="IMU_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="IMU_material" type="mesh" mesh="IMU.stl" class="visual" />
+          <site name="IMU_site" quat="1.0 0.0 0.0 0.0" pos="0.0 0.0 0.0" />
+        </body>
+        <body name="leg_link" pos="-0.228600 -0.407400 0" quat="0.7071068967259818 -0.7071066656470943 0.0 0.0">
+          <joint name="dof_fr" type="hinge" ref="0.0" class="robstride_03" range="-0.523599 2.094395" axis="0 0 1" />
+          <inertial pos="0 0.078690 -0.025400" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007143 0.001452 0.007706" />
+          <geom name="leg_link_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_collision.stl" class="collision" />
+          <geom name="leg_link_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link.stl" class="visual" />
+          <body name="leg_link_5" pos="-0.039100 0.146050 -0.025400" quat="0.7071068967259818 0.0 -0.7071066656470943 0.0">
+            <joint name="dof_mid" type="hinge" ref="0.0" class="robstride_03" range="-1.570796 1.570796" axis="0 0 -1" />
+            <inertial pos="0 0.067360 0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+            <geom name="leg_link_5_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_5_collision.stl" class="collision" />
+            <geom name="leg_link_5_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_5.stl" class="visual" />
+            <body name="leg_link_9" pos="0 0.139700 0.077200" quat="-1.7320510330969933e-07 0.999999999999985 0.0 -0.0">
+              <joint name="dof_bottom_3" type="hinge" ref="0.0" class="robstride_02" range="-1.570796 1.570796" axis="0 0 1" />
+              <inertial pos="0 -0.067360 -0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+              <geom name="leg_link_9_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_9_collision.stl" class="collision" />
+              <geom name="leg_link_9_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_9.stl" class="visual" />
+            </body>
+          </body>
+        </body>
+        <body name="leg_link_2" pos="-0.228600 0.407400 0" quat="0.7071068967259818 -0.7071066656470943 0.0 0.0">
+          <joint name="dof_br" type="hinge" ref="0.0" class="robstride_03" range="-2.094395 0.523599" axis="0 0 -1" />
+          <inertial pos="0 0.078690 0.025400" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007143 0.001452 0.007706" />
+          <geom name="leg_link_2_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_2_collision.stl" class="collision" />
+          <geom name="leg_link_2_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_2.stl" class="visual" />
+          <body name="leg_link_6" pos="-0.039100 0.146050 0.025400" quat="0.7071068967259818 0.0 -0.7071066656470943 0.0">
+            <joint name="dof_mid_2" type="hinge" ref="0.0" class="robstride_03" range="-1.570796 1.570796" axis="0 0 -1" />
+            <inertial pos="0 0.067360 0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+            <geom name="leg_link_6_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_6_collision.stl" class="collision" />
+            <geom name="leg_link_6_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_6.stl" class="visual" />
+            <body name="leg_link_10" pos="0 0.139700 0.077200" quat="-1.7320510330969933e-07 0.999999999999985 0.0 -0.0">
+              <joint name="dof_bottom_4" type="hinge" ref="0.0" class="robstride_02" range="-1.570796 1.570796" axis="0 0 1" />
+              <inertial pos="0 -0.067360 -0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+              <geom name="leg_link_10_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_10_collision.stl" class="collision" />
+              <geom name="leg_link_10_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_10.stl" class="visual" />
+            </body>
+          </body>
+        </body>
+        <body name="leg_link_3" pos="0.228600 0.407400 0" quat="-1.2247452309842457e-07 1.22474483074382e-07 0.7071066656470838 -0.7071068967259713">
+          <joint name="dof_bl" type="hinge" ref="0.0" class="robstride_03" range="-0.523599 2.094395" axis="0 0 1" />
+          <inertial pos="0 0.078690 -0.025400" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007143 0.001452 0.007706" />
+          <geom name="leg_link_3_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_3_collision.stl" class="collision" />
+          <geom name="leg_link_3_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_3.stl" class="visual" />
+          <body name="leg_link_7" pos="-0.039100 0.146050 -0.025400" quat="0.7071068967259818 0.0 -0.7071066656470943 0.0">
+            <joint name="dof_bottom" type="hinge" ref="0.0" class="robstride_02" range="-1.570796 1.570796" axis="0 0 -1" />
+            <inertial pos="0 0.072340 0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+            <geom name="leg_link_7_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_7_collision.stl" class="collision" />
+            <geom name="leg_link_7_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_7.stl" class="visual" />
+            <body name="leg_link_11" pos="0 0.139700 0.077200" quat="-1.7320510330969933e-07 0.999999999999985 0.0 -0.0">
+              <joint name="dof_mid_3" type="hinge" ref="0.0" class="robstride_03" range="-1.570796 1.570796" axis="0 0 1" />
+              <inertial pos="0 -0.067360 -0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+              <geom name="leg_link_11_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_11_collision.stl" class="collision" />
+              <geom name="leg_link_11_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_11.stl" class="visual" />
+            </body>
+          </body>
+        </body>
+        <body name="leg_link_4" pos="0.228600 -0.407400 0" quat="-1.2247452309842457e-07 -1.22474483074382e-07 0.7071066656470838 0.7071068967259713">
+          <joint name="dof_fl" type="hinge" ref="0.0" class="robstride_03" range="-2.094395 0.523599" axis="0 0 1" />
+          <inertial pos="0 -0.078690 -0.025400" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007143 0.001452 0.007706" />
+          <geom name="leg_link_4_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_4_collision.stl" class="collision" />
+          <geom name="leg_link_4_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_4.stl" class="visual" />
+          <body name="leg_link_8" pos="-0.039100 -0.146050 -0.025400" quat="-1.2247452309842457e-07 0.7071068967259713 -1.22474483074382e-07 -0.7071066656470838">
+            <joint name="dof_bottom_2" type="hinge" ref="0.0" class="robstride_02" range="-1.570796 1.570796" axis="0 0 -1" />
+            <inertial pos="0 0.072340 0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+            <geom name="leg_link_8_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_8_collision.stl" class="collision" />
+            <geom name="leg_link_8_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_8.stl" class="visual" />
+            <body name="leg_link_12" pos="0 0.139700 0.077200" quat="-1.7320510330969933e-07 0.999999999999985 0.0 -0.0">
+              <joint name="dof_mid_4" type="hinge" ref="0.0" class="robstride_03" range="-1.570796 1.570796" axis="0 0 1" />
+              <inertial pos="0 -0.067360 -0.038100" quat="1.0 0.0 0.0 0.0" mass="2.022037" diaginertia="0.007706 0.001452 0.007143" />
+              <geom name="leg_link_12_collision" pos="0 0 0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="leg_link_12_collision.stl" class="collision" />
+              <geom name="leg_link_12_visual" pos="0 0 0" quat="1.0 0.0 0.0 0.0" material="leg_link_material" type="mesh" mesh="leg_link_12.stl" class="visual" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <site name="base_site" pos="0 0 0" quat="1 0 0 0" />
+      <camera name="front_camera" mode="track" fovy="90.0" quat="4.329780281177467e-17 4.329780281177466e-17 0.7071067811865475 0.7071067811865476" pos="0.0 2.0 0.5" />
+      <camera name="side_camera" mode="track" fovy="90.0" quat="-0.5 -0.4999999999999999 0.5 0.5000000000000001" pos="-2.0 0.0 0.5" />
+    </body>
+    <geom name="floor" class="floor" size="0 0 0.05" />
+  </worldbody>
+
+  <actuator>
+    <motor name="dof_fr_ctrl" joint="dof_fr" class="robstride_03" />
+    <motor name="dof_mid_ctrl" joint="dof_mid" class="robstride_03" />
+    <motor name="dof_bottom_3_ctrl" joint="dof_bottom_3" class="robstride_02" />
+    <motor name="dof_br_ctrl" joint="dof_br" class="robstride_03" />
+    <motor name="dof_mid_2_ctrl" joint="dof_mid_2" class="robstride_03" />
+    <motor name="dof_bottom_4_ctrl" joint="dof_bottom_4" class="robstride_02" />
+    <motor name="dof_bl_ctrl" joint="dof_bl" class="robstride_03" />
+    <motor name="dof_bottom_ctrl" joint="dof_bottom" class="robstride_02" />
+    <motor name="dof_mid_3_ctrl" joint="dof_mid_3" class="robstride_03" />
+    <motor name="dof_fl_ctrl" joint="dof_fl" class="robstride_03" />
+    <motor name="dof_bottom_2_ctrl" joint="dof_bottom_2" class="robstride_02" />
+    <motor name="dof_mid_4_ctrl" joint="dof_mid_4" class="robstride_03" />
+  </actuator>
+
+  <contact>
+    <exclude body1="torso" body2="IMU" />
+    <exclude body1="torso" body2="leg_link" />
+    <exclude body1="torso" body2="leg_link_2" />
+    <exclude body1="torso" body2="leg_link_3" />
+    <exclude body1="torso" body2="leg_link_4" />
+    <exclude body1="leg_link" body2="leg_link_5" />
+    <exclude body1="leg_link_2" body2="leg_link_6" />
+    <exclude body1="leg_link_3" body2="leg_link_7" />
+    <exclude body1="leg_link_4" body2="leg_link_8" />
+    <exclude body1="leg_link_5" body2="leg_link_9" />
+    <exclude body1="leg_link_6" body2="leg_link_10" />
+    <exclude body1="leg_link_7" body2="leg_link_11" />
+    <exclude body1="leg_link_8" body2="leg_link_12" />
+  </contact>
+
+  <sensor>
+    <framepos name="base_site_pos" objtype="site" objname="base_site" />
+    <framequat name="base_site_quat" objtype="site" objname="base_site" />
+    <framelinvel name="base_site_linvel" objtype="site" objname="base_site" />
+    <frameangvel name="base_site_angvel" objtype="site" objname="base_site" />
+    <velocimeter name="base_site_vel" site="base_site" />
+    <accelerometer name="IMU_acc" site="IMU_site" noise="0.01" />
+    <gyro name="IMU_gyro" site="IMU_site" noise="0.01" />
+    <magnetometer name="IMU_mag" site="IMU_site" noise="0.05" />
+    <framepos name="IMU_site_pos" objtype="site" objname="IMU_site" />
+    <framequat name="IMU_site_quat" objtype="site" objname="IMU_site" />
+    <framelinvel name="IMU_site_linvel" objtype="site" objname="IMU_site" />
+    <frameangvel name="IMU_site_angvel" objtype="site" objname="IMU_site" />
+    <velocimeter name="IMU_site_vel" site="IMU_site" />
+  </sensor>
+</mujoco>

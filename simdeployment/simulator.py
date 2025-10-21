@@ -96,7 +96,7 @@ class MujocoSimulator:
 
         # Reset the simulation
         if self._freejoint:
-            self._data.qpos[3:] = np.array([0.0, 0.0, self._start_height])
+            self._data.qpos[:3] = np.array([0.0, 0.0, self._start_height])
             self._data.qpos[3:7] = np.array(self._initial_quat)
             self._data.qpos[7:] = np.zeros_like(self._data.qpos[7:])
         else:
@@ -295,3 +295,7 @@ class MujocoSimulator:
             self._viewer.close()
         except Exception as e:
             logger.error("Error closing viewer: %s", e)
+
+    @property
+    def dt(self) -> float:
+        return self._dt
