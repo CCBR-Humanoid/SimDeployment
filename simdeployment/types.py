@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import TypedDict
 
 
 class ActuatorType(Enum):
@@ -48,7 +49,7 @@ class ActuatorState:
 
     position: float
     velocity: float
-    torque: float
+    torque: float | None
 
 
 @dataclass
@@ -58,8 +59,7 @@ class ActuatorCommand:
     torque: float | None
 
 
-@dataclass
-class ConfigureActuatorRequest:
-    kp: int
-    kd: int
+class ConfigureActuatorRequest(TypedDict):
+    kp: float
+    kd: float
     max_torque: float

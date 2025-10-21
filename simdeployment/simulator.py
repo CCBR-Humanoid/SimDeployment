@@ -125,8 +125,11 @@ class MujocoSimulator:
             camera_lookat=(0.0, 0.0, 0.5),
         )
 
+        self._sensor_name_to_id = {self._model.sensor(i).name: i for i in range(self._model.nsensor)}
+
         # initialize actuator logic
         self._joint_name_to_id = {self._model.actuator(i).name: i for i in range(self._model.nu)}
+        self._joint_id_to_name = {v: k for k, v in self._joint_name_to_id.items()}
 
         self._joint_name_to_actuator_name = {
             joint_name: f"{joint_name}_ctrl" for joint_name in self._joint_name_to_id.keys()
@@ -153,6 +156,7 @@ class MujocoSimulator:
             self._actuators[joint_id] = actuator
 
         self._current_commands: dict[str, ActuatorCommand] = {}
+        self._next_commands: dict[str, tuple[ActuatorCommand, float]] = {}
 
         self._target_time = time.time()
         self._num_steps = 0
@@ -161,6 +165,15 @@ class MujocoSimulator:
         """Step the simulation forward by one timestep."""
         self._target_time += self._dt
         self._num_steps += 1
+
+        to_remove = []
+        for name, (target_command, application_time) in self._next_commands.items():
+            if application_time <= self._target_time:
+                self._current_commands[name] = target_command
+                to_remove.append(name)
+
+        for name in to_remove:
+            del self._next_commands[name]
 
         # We need to compute torque from actuator commands
         prev_torque = self._data.ctrl[:]
@@ -207,10 +220,22 @@ class MujocoSimulator:
             self._data.xfrc_applied[:] = xfrc
 
     async def get_actuator_state(self, joint_id: int) -> ActuatorState:
-        return ActuatorState(0.0, 0.0, 0.0)
+        if joint_id not in self._joint_id_to_name:
+            raise KeyError(f"Joint ID {joint_id} not found in the model.")
 
-    async def get_sensor_data(self, sensor_name: str) -> dict:
-        return {}
+        joint_name = self._joint_id_to_name[joint_id]
+        joint_data = self._data.joint(joint_name)
+        return ActuatorState(
+            position=joint_data.qpos,
+            velocity=joint_data.qvel,
+            torque=None,
+        )
+
+    async def get_sensor_data(self, sensor_name: str) -> np.ndarray:
+        if sensor_name not in self._sensor_name_to_id:
+            raise KeyError(f"Sensor name {sensor_name} not found in the model.")
+        sensor_id = self._sensor_name_to_id[sensor_name]
+        return self._data.sensor(sensor_id).data.copy()
 
     async def set_actuator_command(self, joint_name: str, actuator_command: ActuatorCommand) -> None:
         """Set the target setpoint for a specific actuator.
@@ -218,7 +243,7 @@ class MujocoSimulator:
         The setpoint type depends on the type of actuator configured for the joint.
         E.g. if joint_id 1 corresponds to a position_actuator, target_setpoint is of unit radians.
         """
-        pass
+        self._next_commands[joint_name] = (actuator_command, self._target_time)
 
     async def command_actuators(self, commands: dict[str, ActuatorCommand]) -> None:
         """Set the target setpoints for multiple actuators at once.
@@ -230,4 +255,43 @@ class MujocoSimulator:
         await asyncio.gather(*commands)
 
     async def configure_actuator(self, joint_id: int, config: ConfigureActuatorRequest) -> None:
-        pass
+        if joint_id not in self._actuators:
+            raise KeyError(f"Joint ID {joint_id} not found in the model.")
+        actuator = self._actuators[joint_id]
+
+        cfg: dict[str, float] = {k: float(v) for k, v in config.items() if isinstance(v, (int, float))}
+
+        actuator.configure(**cfg)
+
+    async def reset(self) -> None:
+        self._next_commands.clear()
+        self._current_commands.clear()
+
+        mujoco.mj_resetData(self._model, self._data)
+
+        self._data.ctrl[:] = 0.0
+        self._data.qfrc_applied[:] = 0.0
+        self._data.qfrc_bias[:] = 0.0
+        self._data.actuator_force[:] = 0.0
+
+        qpos = np.zeros_like(self._data.qpos)
+
+        if self._freejoint:
+            qpos[3:] = np.array([0.0, 0.0, self._start_height])
+            qpos[3:7] = np.array(self._initial_quat)
+            qpos[7:] = np.zeros_like(qpos[7:])
+        else:
+            qpos[:] = np.zeros_like(qpos)
+
+        self._data.qpos[:] = qpos
+        self._data.qvel[:] = np.zeros_like(self._data.qvel)
+        self._data.qacc[:] = np.zeros_like(self._data.qacc)
+
+        mujoco.mj_forward(self._model, self._data)
+        mujoco.mj_step(self._model, self._data)
+
+    async def close(self) -> None:
+        try:
+            self._viewer.close()
+        except Exception as e:
+            logger.error("Error closing viewer: %s", e)
