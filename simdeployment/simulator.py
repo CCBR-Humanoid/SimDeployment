@@ -129,7 +129,11 @@ class MujocoSimulator:
         self._sensor_name_to_id = {self._model.sensor(i).name: i for i in range(self._model.nsensor)}
 
         # initialize actuator logic
-        self._joint_name_to_id = {self._model.actuator(i).name: i for i in range(self._model.nu)}
+        if self._freejoint:
+            self._joint_name_to_id = {self._model.joint(i+1).name: i for i in range(self._model.nu)}
+        else:
+            self._joint_name_to_id = {self._model.joint(i).name: i for i in range(self._model.nu)}
+
         self._joint_id_to_name = {v: k for k, v in self._joint_name_to_id.items()}
 
         self._joint_name_to_actuator_name = {

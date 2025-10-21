@@ -1,0 +1,91 @@
+{
+  "joint_name_to_actuator_metadata": {
+    "dof_fr": {
+      "joint_name": "dof_fr",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_mid": {
+      "joint_name": "dof_mid",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_bottom_3": {
+      "joint_name": "dof_bottom_3",
+      "actuator_type": "position",
+      "kp": 50.0,
+      "kd": 5.0,
+      "max_torque": 17.0
+    },
+    "dof_br": {
+      "joint_name": "dof_br",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_mid_2": {
+      "joint_name": "dof_mid_2",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_bottom_4": {
+      "joint_name": "dof_bottom_4",
+      "actuator_type": "position",
+      "kp": 50.0,
+      "kd": 5.0,
+      "max_torque": 17.0
+    },
+    "dof_bl": {
+      "joint_name": "dof_bl",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_bottom": {
+      "joint_name": "dof_bottom",
+      "actuator_type": "position",
+      "kp": 50.0,
+      "kd": 5.0,
+      "max_torque": 17.0
+    },
+    "dof_mid_3": {
+      "joint_name": "dof_mid_3",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_fl": {
+      "joint_name": "dof_fl",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    },
+    "dof_bottom_2": {
+      "joint_name": "dof_bottom_2",
+      "actuator_type": "position",
+      "kp": 50.0,
+      "kd": 5.0,
+      "max_torque": 17.0
+    },
+    "dof_mid_4": {
+      "joint_name": "dof_mid_4",
+      "actuator_type": "position",
+      "kp": 100.0,
+      "kd": 10.0,
+      "max_torque": 60.0
+    }
+  },
+  "start_height": 1.0,
+  "initial_quat": [1.0, 0.0, 0.0, 0.0],
+  "freejoint": true
+}
