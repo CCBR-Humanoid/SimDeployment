@@ -123,6 +123,7 @@ class MujocoSimulator:
             camera_azimuth=90.0,
             camera_elevation=-10.0,
             camera_lookat=(0.0, 0.0, 0.5),
+            window_title="Mujoco Viewer"
         )
 
         self._sensor_name_to_id = {self._model.sensor(i).name: i for i in range(self._model.nsensor)}
